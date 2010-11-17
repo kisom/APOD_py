@@ -21,9 +21,11 @@ import urllib2
 ########################
 # function definitions #
 ########################
+
 def url_open(url_str):
     """
-    Open the given URL with error handling.
+    Wrapper for urllib2.urlopen that does error handling and
+    offers useful debug messages if something explodes.
     """
 
     try:
@@ -41,6 +43,15 @@ def url_open(url_str):
     return page
 
 def set_background(image_path):
+    """
+    Attempt to set the desktop image for the system.
+
+    Currently only OS X is supported and is likely to be the only system
+    supported. 
+        - I don't have any windows systems to use / test the code on
+        - there are too many possible choices for linux desktop systems and
+          therefore too many desktop-setting mechanisms.
+    """
     platform = sys.platform
 
     print 'using platform: ' + platform
@@ -111,6 +122,7 @@ if len(sys.argv) > 1:
         sys.stderr.write('could not access ' + sys.argv[1])
         sys.stderr.write(' - falling back to ' + store_dir + '\n')
 
+# ensure we have access to the directory we are trying to store images in
 if not os.access(store_dir, os.F_OK):
     sys.stderr.write('no write permissions on ' + store_dir + '!\n')
     sys.exit(-1)
@@ -127,11 +139,12 @@ for line in page:
         image_name  = match2.group(1) + today + '.' + match2.group(2)
         break
 
-# is broeked?
+# check to make sure the image URL was actually pulled from the page
 if not image_url:
     sys.stderr.write('error retrieving APOD filename!\n')
     sys.exit(3)
 
+# save the image to a temporary file
 print 'fetching ' + image_url
 temp_f.write(url_open(image_url))
 temp_f.seek(0)
