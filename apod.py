@@ -73,6 +73,7 @@ def set_background(image_path):
         sys.stderr.write(platform + ' is unsupported.\n')
         return False
 
+
 ############
 # URL vars #
 ############
@@ -113,13 +114,22 @@ today       = '_' + str(datetime.date.today()).replace('-', '')
 # begin main code body #
 ########################
 
+# parse arguments
+parser = argparse.ArgumentParser(description='APOD script arguments')
+parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
+                    'to cause the script to set the desktop background ' +
+                    'to the downloaded image.')
+parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
+                    'images in')
+args = parser.parse_args()
+
 # check to see if both a directory to store files in was specified and
 # that the script has write access to that directory.
-if len(sys.argv) > 1:
-    if os.access(sys.argv[1], os.W_OK):
-        store_dir = sys.argv[1]
+if hasattr(args, 'path') and args.path:
+    if os.access(args.path, os.W_OK):
+        store_dir = args.path
     else:
-        sys.stderr.write('could not access ' + sys.argv[1])
+        sys.stderr.write('could not access ' + args.path)
         sys.stderr.write(' - falling back to ' + store_dir + '\n')
 
 # ensure we have access to the directory we are trying to store images in
@@ -165,3 +175,12 @@ with open(store_file, 'wb+') as image_f:
 
 # wew survived the gauntlet!
 print 'finished!'
+
+if args.set:
+    print 'setting desktop background...'
+    if not set_background(store_file):
+        sys.stderr.write('failed to set desktop background!\n')
+    else:
+        print 'success!'
+
+
