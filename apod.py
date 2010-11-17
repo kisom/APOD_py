@@ -11,17 +11,21 @@ unless specified, the script downloads images to ~/Pictures/apod; the
 storage directory may be specified on the command line.
 """
 
+import argparse
 import datetime
 import os
 import re
 import sys
 import urllib2
 
+########################
+# function definitions #
+########################
 def url_open(url_str):
     """
-    Open the URL with error handling.
+    Open the given URL with error handling.
     """
-    # try to open the URL
+
     try:
         url	= urllib2.urlopen(url_str)
 
@@ -54,18 +58,49 @@ def set_background(image_path):
             return False
         else:
             return True
+    else:
+        sys.stderr.write(platform + ' is unsupported.\n')
+        return False
 
-# globals
-base_url    = 'http://antwrp.gsfc.nasa.gov/apod/'       # APOD site
-image_url   = None                                      # APOD image url
-apod_img    = 'href.+"(image/[\\w+\\./]+\\.[a-z]{3,4})"'# regex to find 
-                                                        #   image URL
-base_img    = '.+/(\\w+)\\.([a-z]{3,4})'                # regex to find
-                                                        #   image name
+############
+# URL vars #
+############
+# base_url: the URL to the APOD page
+# image_url: used to store the URL to the large version of the APOD
+base_url    = 'http://antwrp.gsfc.nasa.gov/apod/'
+image_url   = None
+
+###########
+# regexes #
+###########
+# apod_img: used to pull the large image from the APOD page
+# base_img: grabs the base image name, i.e. from image/date/todays_apod.jpg
+#           this will return $1 = todays_apod and $2 = jpg - note the 
+#           separation of extension from basename.
+apod_img    = 'href.+"(image/[\\w+\\./]+\\_big.[a-z]{3,4})"'
+base_img    = '.+/(\\w+)\\.([a-z]{3,4})'
+
+######################
+# path and file vars #
+######################
+# store_dir: where file should be saved
+# image_name: the name of the image; taken from the base_img regex in the
+#             form $1 + '_date' + $2 where date is in the form yyyymmdd.
+# temp_f: file descriptor for the temporary file the image is download as
+#         the file is later moved to store_dir/image_name
 store_dir = os.environ['HOME'] + '/Pictures/apod/'      # default save dir
 image_name  = None                                      # image name
 temp_f      = os.tmpfile()                              # temp file
+
+######################
+# miscellaneous vars #
+######################
 today       = '_' + str(datetime.date.today()).replace('-', '')
+
+
+########################
+# begin main code body #
+########################
 
 # check to see if both a directory to store files in was specified and
 # that the script has write access to that directory.
