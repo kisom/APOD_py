@@ -73,7 +73,7 @@ def set_background(image_path):
     elif "linux2" == platform:
         user     = os.environ['USER']
         deskenv  = 'ps -au%s -eo command | grep %s | grep -v grep '
-        deskenv += '2>&1 /dev/null' 
+        deskenv += '2>&1 >  /dev/null' 
         deskenv  = deskenv % (user, '%s')
 
         desktops = {
