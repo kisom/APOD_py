@@ -78,7 +78,7 @@ def set_background(image_path):
         deskenv  = deskenv % (user, '%s')
 
         desktops = {
-                    'gnome': { 'process':'gnome-session' }
+                    'gnome': { 'process':'gnome-session' },
                     'fluxbox': { 'process':'fluxbox' }
                    }
         for desktop in desktops:
