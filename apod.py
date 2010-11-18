@@ -122,13 +122,13 @@ def set_background(image_path):
                     err('programs (tried Esetroot and fbsetbg)!\n')
                     return False
                 else:
-                fbsetbg = '$(which fbsetbg) -f %s' % image_path
-                ret_val = os.system(fbsetbg)
-                if ret_val:
-                    err('error getting fbsetbg to set the background!')
-                    return False
-                else:
-                    return True
+                    fbsetbg = '$(which fbsetbg) -f %s' % image_path
+                    ret_val = os.system(fbsetbg)
+                    if ret_val:
+                        err('error getting fbsetbg to set the background!')
+                        return False
+                    else:
+                        return True
             else:
                 esetroot = '$(which Esetroot) -scale %s' % image_path
                 ret_val = os.system(esetroot)
