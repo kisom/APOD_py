@@ -93,7 +93,7 @@ def set_background(image_path):
             try:
                 import gconf
                 client      = gconf.client_get_default()
-                background  = '/desktop/gnome/background/picture_file'
+                background  = '/desktop/gnome/background/picture_filename'
 
                 if not client.set_string(background, image_path):
                     sys.stderr.write('failed to set GNOME desktop ' +
