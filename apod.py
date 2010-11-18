@@ -73,7 +73,7 @@ def set_background(image_path):
     elif "linux2" == platform:
         user     = os.environ['USER']
         deskenv  = 'ps -au%s -eo command | grep %s | grep -v grep '
-        deskenv += '2>&1 >  /dev/null' 
+        deskenv += '2>&1 > /dev/null' 
         deskenv  = deskenv % (user, '%s')
 
         desktops = {
@@ -81,7 +81,7 @@ def set_background(image_path):
                    }
         for desktop in desktops:
             ret_val = os.system(deskenv % desktops[desktop]['process'])
-            print ret_val
+            print '*', ret_val, desktop
             if 'gnome' == desktop and ret_val == 0: break
 
         else:
@@ -89,7 +89,7 @@ def set_background(image_path):
                              'environment or window manager!\n')
             return False    
 
-        if 'gnome' == 'desktop':
+        if 'gnome' == desktop:
             try:
                 import gconf
                 client      = gconf.client_get_default()
