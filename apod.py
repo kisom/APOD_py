@@ -90,6 +90,8 @@ def set_background(image_path):
             err('manager!\n')
             return False    
 
+        # set gconf background string if the user is currently running
+        # a GNOME session
         if 'gnome' == desktop:
             try:
                 import gconf
@@ -109,6 +111,9 @@ def set_background(image_path):
 
             else:
                 return True
+
+        # if the user is running fluxbox, look for Esetroot (the first
+        # choice) or fbsetbg.
         elif 'fluxbox' == desktop:
             eset_cmd    = 'which Esetroot 2>&1 > /dev/null' 
             fbset_cmd   = 'which fbsetbg 2>&1 > /dev/null'
