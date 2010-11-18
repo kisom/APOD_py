@@ -72,10 +72,11 @@ def set_background(image_path):
 
     elif "linux2" == platform:
         user    = os.environ['USER']
-        deskenv = '\'ps -au%s -eo command | grep %s\'' % (user, '%s')
+        deskenv = 'ps -au%s -eo command | grep %s 2>&1 /dev/null' 
+        deskenv = deskenv % (user, '%s')
 
         desktops = {
-                    'gnome': { 'process':'gnome-session' }
+                    'gnome': { 'process':'[g]nome-session' }
                    }
         for desktop in desktops:
             (result, ret_val) = os.system(deskenv % 
@@ -129,7 +130,7 @@ image_url   = None
 # base_img: grabs the base image name, i.e. from image/date/todays_apod.jpg
 #           this will return $1 = todays_apod and $2 = jpg - note the 
 #           separation of extension from basename.
-apod_img    = 'href.+"(image/[\\w+\\./]+\\_big.[a-z]{3,4})"'
+apod_img    = 'href.+"(image/[\\w+\\./]+\\.[a-z]{3,4})"'
 base_img    = '.+/(\\w+)\\.([a-z]{3,4})'
 
 ######################
