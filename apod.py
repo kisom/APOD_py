@@ -115,7 +115,8 @@ today       = '_' + str(datetime.date.today()).replace('-', '')
 ########################
 
 # parse arguments
-parser = argparse.ArgumentParser(description='APOD script arguments')
+parser = argparse.ArgumentParser(description='wee little python script'  +
+                                 'to grab NASA\'s APOD')
 parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to cause the script to set the desktop background ' +
                     'to the downloaded image.')
@@ -140,7 +141,7 @@ if not os.access(store_dir, os.F_OK):
     sys.exit(-1)
 
 # fetch page
-page    = url_open(base_url).split('\n')
+page    = url_open(base_url + 'astropix.html').split('\n')
 
 # hunt down the APOD
 for line in page:
