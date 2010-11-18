@@ -72,7 +72,7 @@ def set_background(image_path):
 
     elif "linux2" == platform:
         user    = os.environ['USER']
-        deskenv = 'ps -au%s -eo command | grep %s' % (user, '%s')
+        deskenv = '\'ps -au%s -eo command | grep %s\'' % (user, '%s')
 
         desktops = {
                     'gnome': { 'process':'gnome-session' }
