@@ -61,7 +61,7 @@ def set_background(image_path):
             from appscript import app, mactypes
             app('Finder').desktop_picture.set(mactypes.File(image_path))
         except ImportError:
-            sys.stderr.write('could not import appscript. please ensure')
+            sys.stderr.write('could not import appscript. please ensure ')
             sys.stderr.write('appscript is installed.\n')
             return False
         except:
@@ -128,6 +128,8 @@ args = parser.parse_args()
 if hasattr(args, 'path') and args.path:
     if os.access(args.path, os.W_OK):
         store_dir = args.path
+        if not store_dir[-1] == '/':
+            store_dir += '/'
     else:
         sys.stderr.write('could not access ' + args.path)
         sys.stderr.write(' - falling back to ' + store_dir + '\n')
