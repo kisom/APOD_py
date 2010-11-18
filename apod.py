@@ -80,12 +80,13 @@ def set_background(image_path):
                    }
         for desktop in desktops:
             ret_val = os.system(deskenv % desktops[desktop]['process'])
+            print ret_val
             if 'gnome' == desktop and ret_val == 0: break
 
         else:
             sys.stderr.write('couldn\t find a support desktop '           +
                              'environment or window manager!\n')
-            return false    
+            return False    
 
         if 'gnome' == 'desktop':
             try:
