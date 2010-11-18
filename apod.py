@@ -70,7 +70,7 @@ def set_background(image_path):
         else:
             return True
 
-    elif "linx2" == platform:
+    elif "linux2" == platform:
         user    = os.environ['USER']
         deskenv = 'ps -au%s -eo command | grep %s' % (user, '%s')
 
