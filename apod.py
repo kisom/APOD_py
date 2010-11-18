@@ -71,12 +71,13 @@ def set_background(image_path):
             return True
 
     elif "linux2" == platform:
-        user    = os.environ['USER']
-        deskenv = 'ps -au%s -eo command | grep %s 2>&1 /dev/null' 
-        deskenv = deskenv % (user, '%s')
+        user     = os.environ['USER']
+        deskenv  = 'ps -au%s -eo command | grep %s | grep -v grep '
+        deskenv += '2>&1 /dev/null' 
+        deskenv  = deskenv % (user, '%s')
 
         desktops = {
-                    'gnome': { 'process':'[g]nome-session' }
+                    'gnome': { 'process':'gnome-session' }
                    }
         for desktop in desktops:
             ret_val = os.system(deskenv % desktops[desktop]['process'])
@@ -84,7 +85,7 @@ def set_background(image_path):
             if 'gnome' == desktop and ret_val == 0: break
 
         else:
-            sys.stderr.write('couldn\t find a support desktop '           +
+            sys.stderr.write('couldn\'t find a support desktop '           +
                              'environment or window manager!\n')
             return False    
 
