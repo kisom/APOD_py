@@ -69,9 +69,49 @@ def set_background(image_path):
             return False
         else:
             return True
-    else:
-        sys.stderr.write(platform + ' is unsupported.\n')
-        return False
+
+    elif "linx2" == platform:
+        user    = os.environ['USER']
+        deskenv = 'ps -au%s -eo command | grep %s' % (user, '%s')
+
+        desktops = {
+                    'gnome': { 'process':'gnome-session' }
+                   }
+        for desktop in desktops:
+            (result, ret_val) = system(deskenv % 
+                                       desktops[desktop]['process'])
+            if 'gnome' == desktop and ret_val == 0: break
+
+        else:
+            sys.stderr.write('couldn\t find a support desktop '           +
+                             'environment or window manager!\n')
+            return false    
+
+        if 'gnome' == 'desktop':
+            try:
+                import gconf
+                client      = gconf.client_get_default()
+                background  = '/desktop/gnome/background/picture_file'
+
+                if not client.set_string(background, image_path):
+                    sys.stderr.write('failed to set GNOME desktop ' +
+                                     'background!\n')
+                    return False
+            except ImportError:
+                sys.stderr.write('could not import gconf!\n')
+                return False
+
+            except:
+                sys.stderr.write('ambiguous error setting desktop ' +
+                                 'background!\n')
+                return False
+
+            else:
+                return True
+
+            
+    sys.stderr.write(platform + ' is unsupported.\n')
+    return False
 
 
 ############
