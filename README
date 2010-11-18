@@ -1,0 +1,43 @@
+apod.py
+
+This is a wee little python script to pull down the APOD and, in OS X,
+possibly set the desktop background. It does handle exceptions, writing
+useful (usually) error messages to stderr. The default behaviour of the
+script is to:
+    1. load the APOD page and determine what the APOD is.
+    2. grab the APOD url.
+    3. open a temporary file and save the image there.
+    4. determine the filename to save the image as the base name from the 
+       APOD (i.e. images/1011/APOD_cool_pic.jpg -> APOD_cool_pic.jpg) and 
+       append the date the image was grabbed, i.e. APOD_cool_pic_20101110.
+    5. check to see if a file with that name exists in the given path.
+    6. if not, save the file. if the file already exists, exit the script.
+    7. if the file was saved and the --set flag was passed, check to see
+       what OS the host is running. currently only supports setting the
+       wallpaper in OS X. 
+    8. fin.
+
+The default directory to save images in is ${HOME}/Pictures/apod/
+I have no idea if ${HOME} is set in windows. Please note that since I do
+not have any win32 systems, I haven't tested this script under windows.
+Caveat emptor.
+
+usage: apod.py [-h] [-s] [-p PATH]
+
+APOD script arguments
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s, --set             flag to cause the script to set the desktop 
+                        background to the downloaded image.
+  -p PATH, --path PATH  path to store downloaded images in
+
+WHY DESKTOP BACKGROUND CHANGING IS ONLY SUPPORTED IN OS X:
+    win32:      I have no win32 systems, therefore I both don't really care
+                all that much and can't really test it. Feel free to do it.
+    linux2:     Way too many desktop systems and no reliable way to tell
+                what desktop environment or window manager the user is 
+                using or how to set the desktop background for that user.
+    ???         I probably don't have ???. Maybe one day Haiku will be 
+                supported.
+
