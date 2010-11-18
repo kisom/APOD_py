@@ -79,8 +79,7 @@ def set_background(image_path):
                     'gnome': { 'process':'[g]nome-session' }
                    }
         for desktop in desktops:
-            (result, ret_val) = os.system(deskenv % 
-                                       desktops[desktop]['process'])
+            ret_val = os.system(deskenv % desktops[desktop]['process'])
             if 'gnome' == desktop and ret_val == 0: break
 
         else:
