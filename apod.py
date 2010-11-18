@@ -53,6 +53,7 @@ def set_background(image_path):
           therefore too many desktop-setting mechanisms.
     """
     platform = sys.platform
+    err      = sys.stderr.write
 
     print 'using platform: ' + platform
 
@@ -61,11 +62,11 @@ def set_background(image_path):
             from appscript import app, mactypes
             app('Finder').desktop_picture.set(mactypes.File(image_path))
         except ImportError:
-            sys.stderr.write('could not import appscript. please ensure ')
-            sys.stderr.write('appscript is installed.\n')
+            err('could not import appscript. please ensure ')
+            err('appscript is installed.\n')
             return False
         except:
-            sys.stderr.write('error setting wallpaper!')
+            err('error setting wallpaper!')
             return False
         else:
             return True
@@ -78,15 +79,15 @@ def set_background(image_path):
 
         desktops = {
                     'gnome': { 'process':'gnome-session' }
+                    'fluxbox': { 'process':'fluxbox' }
                    }
         for desktop in desktops:
             ret_val = os.system(deskenv % desktops[desktop]['process'])
-            print '*', ret_val, desktop
-            if 'gnome' == desktop and ret_val == 0: break
+            if ret_val == 0: break
 
         else:
-            sys.stderr.write('couldn\'t find a support desktop '           +
-                             'environment or window manager!\n')
+            err('couldn\'t find a support desktop environment or window ')
+            err('manager!\n')
             return False    
 
         if 'gnome' == desktop:
@@ -96,20 +97,46 @@ def set_background(image_path):
                 background  = '/desktop/gnome/background/picture_filename'
 
                 if not client.set_string(background, image_path):
-                    sys.stderr.write('failed to set GNOME desktop ' +
-                                     'background!\n')
+                    err('failed to set GNOME desktop background!\n')
                     return False
             except ImportError:
-                sys.stderr.write('could not import gconf!\n')
+                err('could not import gconf!\n')
                 return False
 
             except:
-                sys.stderr.write('ambiguous error setting desktop ' +
-                                 'background!\n')
+                err('ambiguous error setting desktop background!\n')
                 return False
 
             else:
                 return True
+        elif 'fluxbox' == desktop:
+            eset_cmd    = 'which Esetroot 2>&1 > /dev/null' 
+            fbset_cmd   = 'which fbsetbg 2>&1 > /dev/null'
+
+            ret_val = os.system(eset_cmd)
+
+            if ret_val:
+                ret_val = os.system(fbset_cmd)
+                if ret_val:
+                    err('could not find any desktop background-setting ')
+                    err('programs (tried Esetroot and fbsetbg)!\n')
+                    return False
+                else:
+                fbsetbg = '$(which fbsetbg) -f %s' % image_path
+                ret_val = os.system(fbsetbg)
+                if ret_val:
+                    err('error getting fbsetbg to set the background!')
+                    return False
+                else:
+                    return True
+            else:
+                esetroot = '$(which Esetroot) -scale %s' % image_path
+                ret_val = os.system(esetroot)
+                if ret_val:
+                    err('error getting Esetroot to set the background!')
+                    return False
+                else:
+                    return True
 
             
     sys.stderr.write(platform + ' is unsupported.\n')
