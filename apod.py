@@ -164,6 +164,8 @@ store_file  = store_dir + image_name
 # diagnostic information
 print 'will store as ' + store_dir + image_name
 
+# note the default behaviour is that in the event the file already exists,
+# assume the file should die. 
 if os.access(store_file, os.F_OK):
     print 'file already exists!'
     sys.exit(4)
@@ -176,6 +178,7 @@ with open(store_file, 'wb+') as image_f:
 # wew survived the gauntlet!
 print 'finished!'
 
+# possibly set the background 
 if args.set:
     print 'setting desktop background...'
     if not set_background(store_file):
