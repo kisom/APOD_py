@@ -1,9 +1,9 @@
 apod.py
 
-This is a wee little python script to pull down the APOD and, in OS X,
-possibly set the desktop background. It does handle exceptions, writing
-useful (usually) error messages to stderr. The default behaviour of the
-script is to:
+This is a wee little python script to pull down the APOD and, for a few
+operating systems / desktop environments, possibly set the desktop 
+background. It does handle exceptions, writing useful (usually) error 
+messages to stderr. The default behaviour of the script is to:
     1. load the APOD page and determine what the APOD is.
     2. grab the APOD url.
     3. open a temporary file and save the image there.
@@ -32,12 +32,16 @@ optional arguments:
                         background to the downloaded image.
   -p PATH, --path PATH  path to store downloaded images in
 
-WHY DESKTOP BACKGROUND CHANGING IS ONLY SUPPORTED IN OS X:
-    win32:      I have no win32 systems, therefore I both don't really care
-                all that much and can't really test it. Feel free to do it.
-    linux2:     Way too many desktop systems and no reliable way to tell
-                what desktop environment or window manager the user is 
-                using or how to set the desktop background for that user.
-    ???         I probably don't have ???. Maybe one day Haiku will be 
-                supported.
+
+SYSTEMS WHERE BACKGROUND SETTING IS IMPLEMENTED:
+    - OS X
+    - GNOME
+
+    PLANNED:
+    - fluxbox
+    - awesomewm
+
+    DO NOT PLAN TO SUPPORT (i.e. do it yourself):
+    - win32
+    - kde
 
