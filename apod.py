@@ -206,7 +206,6 @@ parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to the downloaded image.')
 parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
                     'images in')
-parser.add_argument('-u', '--user', help = 'user to set the desktop for')
 args = parser.parse_args()
 
 # check to see if both a directory to store files in was specified and
