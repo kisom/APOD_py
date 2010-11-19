@@ -44,14 +44,12 @@ def url_open(url_str):
 
 def set_background(image_path):
     """
-    Attempt to set the desktop image for the system.
-
-    Currently only OS X is supported and is likely to be the only system
-    supported. 
-        - I don't have any windows systems to use / test the code on
-        - there are too many possible choices for linux desktop systems and
-          therefore too many desktop-setting mechanisms.
+    Attempt to set the desktop image for the system. See the README for 
+    supported file types.
     """
+
+    ### here be the dragons of OS-specific hacks!
+
     platform = sys.platform
     err      = sys.stderr.write
 
