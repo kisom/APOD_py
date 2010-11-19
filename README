@@ -51,6 +51,9 @@ optional arguments:
   -p PATH, --path PATH  path to store downloaded images in
 
 
+I designed this to be a cronjob. My crontab entry looks like this:
+15  22  *   *   *  python ${APOD_py}/apod.py -s 
+
 SYSTEMS WHERE BACKGROUND SETTING IS IMPLEMENTED:
     - OS X
     - GNOME
