@@ -72,7 +72,14 @@ def set_background(image_path):
             return True
 
     elif "linux2" == platform:
-        user     = os.environ['USER']
+        try:
+            user     = os.environ['USER']
+        except KeyError:
+            # because linux is dumb
+            user    = os.environ['LOGNAME']
+
+        os.environ['DISPLAY'] = ':0.0'
+        print 'running as ', user
         deskenv  = 'ps -au%s -eo command | grep %s | grep -v grep '
         deskenv += '2>&1 > /dev/null' 
         deskenv  = deskenv % (user, '%s')
@@ -89,6 +96,8 @@ def set_background(image_path):
             err('couldn\'t find a support desktop environment or window ')
             err('manager!\n')
             return False    
+
+        print 'desktop: ', desktop
 
         # set gconf background string if the user is currently running
         # a GNOME session
@@ -110,6 +119,7 @@ def set_background(image_path):
                 return False
 
             else:
+                print 'done!'
                 return True
 
         # if the user is running fluxbox, look for Esetroot (the first
@@ -196,6 +206,7 @@ parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to the downloaded image.')
 parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
                     'images in')
+parser.add_argument('-u', '--user', help = 'user to set the desktop for')
 args = parser.parse_args()
 
 # check to see if both a directory to store files in was specified and
