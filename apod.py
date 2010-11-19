@@ -55,8 +55,6 @@ def set_background(image_path):
     platform = sys.platform
     err      = sys.stderr.write
 
-    print 'using platform: ' + platform
-
     if "darwin" == platform:
         try:
             from appscript import app, mactypes
@@ -73,13 +71,13 @@ def set_background(image_path):
 
     elif "linux2" == platform:
         try:
-            user     = os.environ['USER']
+            user     = os.environ['LOGNAME']
         except KeyError:
-            # because linux is dumb
-            user    = os.environ['LOGNAME']
+            return False
 
+        # this is the default X display.
+        # in the future, maybe add --display arg?
         os.environ['DISPLAY'] = ':0.0'
-        print 'running as ', user
         deskenv  = 'ps -au%s -eo command | grep %s | grep -v grep '
         deskenv += '2>&1 > /dev/null' 
         deskenv  = deskenv % (user, '%s')
@@ -96,8 +94,6 @@ def set_background(image_path):
             err('couldn\'t find a support desktop environment or window ')
             err('manager!\n')
             return False    
-
-        print 'desktop: ', desktop
 
         # set gconf background string if the user is currently running
         # a GNOME session
