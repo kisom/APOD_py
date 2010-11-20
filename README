@@ -40,7 +40,7 @@ Caveat emptor.
 
 
 USAGE:
-usage: apod.py [-h] [-s] [-p PATH]
+usage: apod.py [-h] [-s] [-p PATH] [-f]
 
 APOD script arguments
 
