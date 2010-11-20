@@ -49,7 +49,7 @@ optional arguments:
   -s, --set             flag to cause the script to set the desktop 
                         background to the downloaded image.
   -p PATH, --path PATH  path to store downloaded images in
-
+  -f, --force           force setting background, even if image exists already
 
 I designed this to be a cronjob. My crontab entry looks like this:
 15  22  *   *   *  python ${APOD_py}/apod.py -s 

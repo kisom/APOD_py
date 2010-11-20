@@ -194,7 +194,7 @@ today       = '_' + str(datetime.date.today()).replace('-', '')
 
 # parse arguments
 parser = argparse.ArgumentParser(description='wee little python script'  +
-                                 'to grab NASA\'s APOD')
+                                 ' to grab NASA\'s APOD')
 parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to cause the script to set the desktop background ' +
                     'to the downloaded image.')
