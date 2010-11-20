@@ -4,7 +4,7 @@ apod.py
 
 written by Kyle Isom <coder@kyleisom.net>
 
-fetched NASA APOD. Usage:
+fetches NASA APOD. Usage:
     apod.py [optional directory]
 
 unless specified, the script downloads images to ~/Pictures/apod; the
@@ -200,6 +200,8 @@ parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to the downloaded image.')
 parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
                     'images in')
+parser.add_argument('-f', '--force', help='force setting background, '   +
+                    'even if image exists already', action = 'store_true')
 args = parser.parse_args()
 
 # check to see if both a directory to store files in was specified and
@@ -209,14 +211,13 @@ if hasattr(args, 'path') and args.path:
         store_dir = args.path
         if not store_dir[-1] == '/':
             store_dir += '/'
-    else:
-        sys.stderr.write('could not access ' + args.path)
-        sys.stderr.write(' - falling back to ' + store_dir + '\n')
 
 # ensure we have access to the directory we are trying to store images in
+# if not, mkdir()
 if not os.access(store_dir, os.F_OK):
-    sys.stderr.write('no write permissions on ' + store_dir + '!\n')
-    sys.exit(-1)
+    print 'no write permissions on ' + store_dir + '!'
+    print 'creating ' + store_dir
+    os.mkdir(store_dir)
 
 # fetch page
 page    = url_open(base_url + 'astropix.html').split('\n')
@@ -249,15 +250,14 @@ print 'will store as ' + store_dir + image_name
 # assume the file should die. 
 if os.access(store_file, os.F_OK):
     print 'file already exists!'
-    sys.exit(4)
+
+    if not args.force:
+        sys.exit(4)
     
-
-# save the file
-with open(store_file, 'wb+') as image_f:
-    image_f.write(temp_f.read())
-
-# wew survived the gauntlet!
-print 'finished!'
+elif not os.access(store_file, os.F_OK):
+    # save the file
+    with open(store_file, 'wb+') as image_f:
+        image_f.write(temp_f.read())
 
 # possibly set the background 
 if args.set:
@@ -267,4 +267,5 @@ if args.set:
     else:
         print 'success!'
 
-
+# wew survived the gauntlet!
+print 'finished!'
