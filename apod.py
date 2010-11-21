@@ -236,6 +236,9 @@ if not image_url:
     sys.stderr.write('error retrieving APOD filename!\n')
     sys.exit(3)
 
+# filename to save image as
+store_file  = store_dir + image_name
+
 # note the default behaviour is that in the event the file already exists,
 # we won't download the image. If the force option is specified, the 
 # program will try to set the background.
@@ -251,7 +254,6 @@ elif not os.access(store_file, os.F_OK):
     temp_f.write(url_open(image_url))
     temp_f.seek(0)
 
-    store_file  = store_dir + image_name
 
     # diagnostic information
     print 'will store as ' + store_dir + image_name
