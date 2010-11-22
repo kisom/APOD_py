@@ -213,20 +213,20 @@ parser.add_argument('-o', '--overwrite', help='overwrite existing image',
                     action='store_true')
 args = parser.parse_args()
 
+
 # check to see if both a directory to store files in was specified and
 # that the script has write access to that directory.
-if hasattr(args, 'path') and args.path:
-    if os.access(args.path, os.W_OK):
-        store_dir = args.path
-        if not store_dir[-1] == '/':
-            store_dir += '/'
+if args.path:
+    store_dir = args.path
+    if not store_dir[-1] == '/':
+        store_dir += '/'
 
 # ensure we have access to the directory we are trying to store images in
 # if not, mkdir()
-if not os.access(store_dir, os.F_OK):
+if not os.access(store_dir, os.W_OK):
     print 'no write permissions on ' + store_dir + '!'
     print 'creating ' + store_dir
-    os.mkdir(store_dir)
+    os.makedirs(store_dir)
 
 # fetch page
 page    = url_open(base_url + 'astropix.html').split('\n')
