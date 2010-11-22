@@ -16,6 +16,7 @@ import datetime
 import os
 import re
 import sys
+import tempfile
 import urllib2
 
 ########################
@@ -176,11 +177,13 @@ base_img    = '.+/(\\w+)\\.([a-z]{3,4})'
 # store_dir: where file should be saved
 # image_name: the name of the image; taken from the base_img regex in the
 #             form $1 + '_date' + $2 where date is in the form yyyymmdd.
-# temp_f: file descriptor for the temporary file the image is download as
-#         the file is later moved to store_dir/image_name
+# temp: file descriptor for the temporary file the image is download as
+#       the file is later moved to store_dir/image_name. Note that this
+#       has two elements: temp[0] is the file descriptor, temp[1] is the
+#       pathname.
 store_dir = os.environ['HOME'] + '/Pictures/apod/'      # default save dir
 image_name  = None                                      # image name
-temp_f      = os.tmpfile()                              # temp file
+temp        = tempfile.mkstemp()                        # temp file
 
 ######################
 # miscellaneous vars #
@@ -251,8 +254,11 @@ if os.access(store_file, os.F_OK):
 elif not os.access(store_file, os.F_OK):
     # save the image to a temporary file
     print 'fetching ' + image_url
-    temp_f.write(url_open(image_url))
-    temp_f.seek(0)
+    os.write(temp[0], url_open(image_url))
+
+    # need to seek to beginning of file to read out the image to the 
+    # actual file.
+    os.lseek(temp[0], 0, os.SEEK_SET)
 
 
     # diagnostic information
@@ -260,8 +266,14 @@ elif not os.access(store_file, os.F_OK):
     
     # save the file
     with open(store_file, 'wb+') as image_f:
-        image_f.write(temp_f.read())
+        image_f.write(os.read(temp[0]))
+    
     print 'download complete!'
+
+    # clean up the temp file
+    u_path  = temp[1]
+    os.close(temp[0])
+    os.unlink(u_path)
 
 # possibly set the background 
 if args.set:
