@@ -209,6 +209,8 @@ parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
                     'images in')
 parser.add_argument('-f', '--force', help='force setting background, '   +
                     'even if image exists already', action = 'store_true')
+parser.add_argument('-o', '--overwrite', help='overwrite existing image',
+                    action='store_true')
 args = parser.parse_args()
 
 # check to see if both a directory to store files in was specified and
@@ -246,16 +248,19 @@ if not image_url:
 # filename to save image as
 store_file  = store_dir + image_name
 
+
 # note the default behaviour is that in the event the file already exists,
 # we won't download the image. If the force option is specified, the 
 # program will try to set the background.
-if os.access(store_file, os.F_OK):
+if os.access(store_file, os.F_OK) and not args.overwrite:
     print 'file already exists!'
 
     if not args.force:
         sys.exit(4)
 
-elif not os.access(store_file, os.F_OK):
+elif not os.access(store_file, os.F_OK) or args.overwrite:
+    if os.access(store_file, os.F_OK): print 'file exists...'
+    if args.overwrite: print 'will overwrite!'
     # save the image to a temporary file
     print 'fetching ' + image_url
     image_size = os.write(temp[0], url_open(image_url))
