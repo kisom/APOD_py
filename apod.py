@@ -202,15 +202,15 @@ image_size  = 0
 # parse arguments
 parser = argparse.ArgumentParser(description='wee little python script'  +
                                  ' to grab NASA\'s APOD')
-parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
-                    'to cause the script to set the desktop background ' +
-                    'to the downloaded image.')
-parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
-                    'images in')
 parser.add_argument('-f', '--force', help='force setting background, '   +
                     'even if image exists already', action = 'store_true')
 parser.add_argument('-o', '--overwrite', help='overwrite existing image',
                     action='store_true')
+parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
+                    'images in')
+parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
+                    'to cause the script to set the desktop background ' +
+                    'to the downloaded image.')
 args = parser.parse_args()
 
 
