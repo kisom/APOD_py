@@ -188,7 +188,11 @@ temp        = tempfile.mkstemp()                        # temp file
 ######################
 # miscellaneous vars #
 ######################
+# today: the date in a string format appropriate for appending to the 
+#        image filename.
+# image_size: number of bytes written
 today       = '_' + str(datetime.date.today()).replace('-', '')
+image_size  = 0
 
 
 ########################
@@ -254,7 +258,7 @@ if os.access(store_file, os.F_OK):
 elif not os.access(store_file, os.F_OK):
     # save the image to a temporary file
     print 'fetching ' + image_url
-    os.write(temp[0], url_open(image_url))
+    image_size = os.write(temp[0], url_open(image_url))
 
     # need to seek to beginning of file to read out the image to the 
     # actual file.
@@ -266,7 +270,7 @@ elif not os.access(store_file, os.F_OK):
     
     # save the file
     with open(store_file, 'wb+') as image_f:
-        image_f.write(os.read(temp[0]))
+        image_f.write(os.read(temp[0], image_size))
     
     print 'download complete!'
 
