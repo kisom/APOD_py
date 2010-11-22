@@ -226,7 +226,11 @@ if args.path:
 if not os.access(store_dir, os.W_OK):
     print 'no write permissions on ' + store_dir + '!'
     print 'creating ' + store_dir
-    os.makedirs(store_dir)
+    try:
+        os.makedirs(store_dir)
+    except OSError:
+        sys.stderr.write('could not create dir ' + store_dir + '!\n')
+        sys.exit(2)
 
 # fetch page
 page    = url_open(base_url + 'astropix.html').split('\n')
