@@ -18,7 +18,7 @@ import re
 import sys
 import tempfile
 import urllib2
-from pysetbg.pysetbg import set_background
+from pysetbg.pysetbg import set_bg
 
 ########################
 # function definitions #
@@ -168,12 +168,13 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 
     # diagnostic information
-    print 'will store as ' + store_dir + image_name
+    print 'will store as ' + store_file
     
     # save the file
     with open(store_file, 'wb+') as image_f:
         image_f.write(os.read(temp[0], image_size))
     
+    print 'file saved to ' + store_file
     print 'download complete!'
 
     # clean up the temp file
@@ -184,7 +185,7 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 # possibly set the background 
 if args.set:
     print 'setting desktop background...'
-    if not set_background(store_file):
+    if not set_bg(store_file):
         sys.stderr.write('failed to set desktop background!\n')
     else:
         print 'success!'
