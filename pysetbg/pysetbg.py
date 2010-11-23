@@ -14,7 +14,7 @@ set or call the background-setting code.
 
 import sys
 
-unix_common = [ 'linux', 'openbsd' ]
+unix_common = [ 'linux', 'openbsd', 'freebsd', 'netbsd' ]
 supported   = [ 'darwin', 'unix_common' ]
 
 
