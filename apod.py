@@ -85,6 +85,7 @@ temp        = tempfile.mkstemp()                        # temp file
 #        image filename.
 # image_size: number of bytes written
 today       = '_' + str(datetime.date.today()).replace('-', '')
+log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
 image_size  = 0
 
 
@@ -150,7 +151,7 @@ store_file  = store_dir + image_name
 # we won't download the image. If the force option is specified, the 
 # program will try to set the background.
 if os.access(store_file, os.F_OK) and not args.overwrite:
-    print 'file already exists!'
+    print '[' + log_time + '] file already exists!'
 
     if not args.force:
         sys.exit(4)
@@ -174,8 +175,8 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
     with open(store_file, 'wb+') as image_f:
         image_f.write(os.read(temp[0], image_size))
     
-    print 'file saved to ' + store_file
-    print 'download complete!'
+    print '[' + log_time + '] file saved to ' + store_file
+    print '[' + log_time + '] download complete!'
 
     # clean up the temp file
     u_path  = temp[1]
@@ -191,4 +192,4 @@ if args.set:
         print 'success!'
 
 # wew survived the gauntlet!
-print 'finished!'
+print '[' + log_time + '] finished!'
