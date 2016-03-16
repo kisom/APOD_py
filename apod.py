@@ -86,6 +86,7 @@ temp        = tempfile.mkstemp()                        # temp file
 # image_size: number of bytes written
 today       = '_' + str(datetime.date.today()).replace('-', '')
 log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
+log_time    = '[' + log_time + ']'
 image_size  = 0
 
 
@@ -118,8 +119,8 @@ if args.path:
 # ensure we have access to the directory we are trying to store images in
 # if not, mkdir()
 if not os.access(store_dir, os.W_OK):
-    print 'no write permissions on ' + store_dir + '!'
-    print 'creating ' + store_dir
+    print log_time + ' no write permissions on ' + store_dir + '!'
+    print log_time + ' creating ' + store_dir
     try:
         os.makedirs(store_dir)
     except OSError:
@@ -151,16 +152,16 @@ store_file  = store_dir + image_name
 # we won't download the image. If the force option is specified, the 
 # program will try to set the background.
 if os.access(store_file, os.F_OK) and not args.overwrite:
-    print '[' + log_time + '] file already exists!'
+    print log_time + ' file already exists!'
 
     if not args.force:
         sys.exit(4)
 
 elif not os.access(store_file, os.F_OK) or args.overwrite:
-    if os.access(store_file, os.F_OK): print 'file exists...'
-    if args.overwrite: print 'will overwrite!'
+    if os.access(store_file, os.F_OK): print log_time + ' file exists...'
+    if args.overwrite: print log_time + ' will overwrite!'
     # save the image to a temporary file
-    print 'fetching ' + image_url
+    print log_time + ' fetching ' + image_url
     image_size = os.write(temp[0], url_open(image_url))
 
     # need to seek to beginning of file to read out the image to the 
@@ -169,14 +170,14 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 
     # diagnostic information
-    print 'will store as ' + store_file
+    print log_time + ' will store as ' + store_file
     
     # save the file
     with open(store_file, 'wb+') as image_f:
         image_f.write(os.read(temp[0], image_size))
     
-    print '[' + log_time + '] file saved to ' + store_file
-    print '[' + log_time + '] download complete!'
+    print log_time + ' file saved to ' + store_file
+    print log_time + ' download complete!'
 
     # clean up the temp file
     u_path  = temp[1]
@@ -185,11 +186,11 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 # possibly set the background 
 if args.set:
-    print 'setting desktop background...'
+    print log_time + ' setting desktop background...'
     if not set_bg(store_file):
         sys.stderr.write('failed to set desktop background!\n')
     else:
-        print 'success!'
+        print log_time + ' success!'
 
 # wew survived the gauntlet!
-print '[' + log_time + '] finished!'
+print log_time +  ' finished!'
