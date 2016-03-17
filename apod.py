@@ -83,6 +83,7 @@ temp        = tempfile.mkstemp()                        # temp file
 ######################
 # today: the date in a string format appropriate for appending to the 
 #        image filename.
+# log_time: date and time formatted to be prepended to the status messages
 # image_size: number of bytes written
 today       = '_' + str(datetime.date.today()).replace('-', '')
 log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
