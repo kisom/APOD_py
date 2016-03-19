@@ -45,6 +45,8 @@ def url_open(url_str):
     return page
     
 def log_message(log_string):
+	log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
+	log_time    = '[' + log_time + ']'
 	return log_time + " " + log_string
 
 
@@ -88,8 +90,6 @@ temp        = tempfile.mkstemp()                        # temp file
 # log_time: date and time formatted to be prepended to the status messages
 # image_size: number of bytes written
 today       = '_' + str(datetime.date.today()).replace('-', '')
-log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
-log_time    = '[' + log_time + ']'
 image_size  = 0
 
 
