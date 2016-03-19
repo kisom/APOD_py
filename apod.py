@@ -46,12 +46,16 @@ def url_open(url_str):
 
 def log_message(log_string):
 	"""
-	Prepend a timestamp onto the progress and error messages if the command line
-	argument is set. Makes for a pretty log file.
+	Prepend a timestamp onto the progress and error messages if the
+	command line argument is set. Makes for a pretty log file.
 	"""
-	log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
-	log_time    = '[' + log_time + ']'
-	return log_time + " " + log_string
+	if args.timestamp:
+		log_time    = datetime.datetime.strftime(datetime.datetime.now(), \
+		              "%Y-%m-%d %H:%M:%S")
+		log_time    = '[' + log_time + ']'
+		return log_time + " " + log_string
+	else:
+		return log_string
 
 
 ############
@@ -112,6 +116,9 @@ parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
 parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to cause the script to set the desktop background ' +
                     'to the downloaded image.')
+parser.add_argument('-t', '--timestamp', action = 'store_true',
+                    help = 'flag to cause timestamps to be prepended to' +
+                    ' progress and error messages.')
 args = parser.parse_args()
 
 
