@@ -36,7 +36,7 @@ def url_open(url_str):
     # something went wrong with the webserver
     except urllib2.HTTPError, e:
         err = sys.stderr.write
-        err('APOD download failed with HTTP error ', e.code, '\n')
+        err(log_message('APOD download failed with HTTP error '), e.code, '\n')
         sys.exit(2)
 
     else:
@@ -137,7 +137,7 @@ if not os.access(store_dir, os.W_OK):
     try:
         os.makedirs(store_dir)
     except OSError:
-        sys.stderr.write('could not create dir ' + store_dir + '!\n')
+        sys.stderr.write(log_message('could not create dir ') + store_dir + '!\n')
         sys.exit(2)
 
 # fetch page
@@ -154,7 +154,7 @@ for line in page:
 
 # check to make sure the image URL was actually pulled from the page
 if not image_url:
-    sys.stderr.write('error retrieving APOD filename!\n')
+    sys.stderr.write(log_message('error retrieving APOD filename!\n'))
     sys.exit(3)
 
 # filename to save image as
@@ -201,7 +201,7 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 if args.set:
     print log_message('setting desktop background...')
     if not set_bg(store_file):
-        sys.stderr.write('failed to set desktop background!\n')
+        sys.stderr.write(log_message('failed to set desktop background!\n'))
     else:
         print log_message('success!')
 
