@@ -43,8 +43,12 @@ def url_open(url_str):
         page 	= url.read()
 
     return page
-    
+
 def log_message(log_string):
+	"""
+	Prepend a timestamp onto the progress and error messages if the command line
+	argument is set. Makes for a pretty log file.
+	"""
 	log_time    = datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m-%d %H:%M:%S")
 	log_time    = '[' + log_time + ']'
 	return log_time + " " + log_string
@@ -87,7 +91,6 @@ temp        = tempfile.mkstemp()                        # temp file
 ######################
 # today: the date in a string format appropriate for appending to the 
 #        image filename.
-# log_time: date and time formatted to be prepended to the status messages
 # image_size: number of bytes written
 today       = '_' + str(datetime.date.today()).replace('-', '')
 image_size  = 0
