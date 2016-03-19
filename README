@@ -40,7 +40,7 @@ Caveat emptor.
 
 
 USAGE:
-usage: apod.py [-h] [-f] [-o] [-p PATH] [-s]
+usage: apod.py [-h] [-f] [-o] [-p PATH] [-s] [-t]
 
 wee little python script to grab NASA's APOD
 
@@ -51,6 +51,8 @@ optional arguments:
   -p PATH, --path PATH  path to store downloaded images in
   -s, --set             flag to cause the script to set the desktop background
                         to the downloaded image.
+  -t, --timestamp       flag to cause timestamps to be prepended to progress
+                        and error messages.
 
 
 I designed this to be a cronjob. My crontab entry looks like this:
