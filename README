@@ -58,6 +58,9 @@ optional arguments:
 I designed this to be a cronjob. My crontab entry looks like this:
 15  22  *   *   *  python ${APOD_py}/apod.py -s 
 
+To log timestamped progress and error messages to a logfile, use this:
+15 22 * * * python apod.py -t >> /var/log/apod.log 2>&1 
+
 SYSTEMS WHERE BACKGROUND SETTING IS IMPLEMENTED:
     - OS X
     - GNOME
