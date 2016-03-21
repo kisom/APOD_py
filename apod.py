@@ -36,7 +36,7 @@ def url_open(url_str):
     # something went wrong with the webserver
     except urllib2.HTTPError, e:
         err = sys.stderr.write
-        err('APOD download failed with HTTP error ', e.code, '\n')
+        err(log_message('APOD download failed with HTTP error '), e.code, '\n')
         sys.exit(2)
 
     else:
@@ -44,6 +44,18 @@ def url_open(url_str):
 
     return page
 
+def log_message(log_string):
+	"""
+	Prepend a timestamp onto the progress and error messages if the
+	command line argument is set. Makes for a pretty log file.
+	"""
+	if args.timestamp:
+		log_time    = datetime.datetime.strftime(datetime.datetime.now(), \
+		              "%Y-%m-%d %H:%M:%S")
+		log_time    = '[' + log_time + ']'
+		return log_time + " " + log_string
+	else:
+		return log_string
 
 
 ############
@@ -104,6 +116,9 @@ parser.add_argument('-p', '--path', help = 'path to store downloaded '   +
 parser.add_argument('-s', '--set', action = 'store_true', help = 'flag ' +
                     'to cause the script to set the desktop background ' +
                     'to the downloaded image.')
+parser.add_argument('-t', '--timestamp', action = 'store_true',
+                    help = 'flag to cause timestamps to be prepended to' +
+                    ' progress and error messages.')
 args = parser.parse_args()
 
 
@@ -117,12 +132,12 @@ if args.path:
 # ensure we have access to the directory we are trying to store images in
 # if not, mkdir()
 if not os.access(store_dir, os.W_OK):
-    print 'no write permissions on ' + store_dir + '!'
-    print 'creating ' + store_dir
+    print log_message('no write permissions on ' + store_dir + '!')
+    print log_message('creating ' + store_dir)
     try:
         os.makedirs(store_dir)
     except OSError:
-        sys.stderr.write('could not create dir ' + store_dir + '!\n')
+        sys.stderr.write(log_message('could not create dir ') + store_dir + '!\n')
         sys.exit(2)
 
 # fetch page
@@ -139,7 +154,7 @@ for line in page:
 
 # check to make sure the image URL was actually pulled from the page
 if not image_url:
-    sys.stderr.write('error retrieving APOD filename!\n')
+    sys.stderr.write(log_message('error retrieving APOD filename!\n'))
     sys.exit(3)
 
 # filename to save image as
@@ -150,16 +165,16 @@ store_file  = store_dir + image_name
 # we won't download the image. If the force option is specified, the 
 # program will try to set the background.
 if os.access(store_file, os.F_OK) and not args.overwrite:
-    print 'file already exists!'
+    print log_message('file already exists!')
 
     if not args.force:
         sys.exit(4)
 
 elif not os.access(store_file, os.F_OK) or args.overwrite:
-    if os.access(store_file, os.F_OK): print 'file exists...'
-    if args.overwrite: print 'will overwrite!'
+    if os.access(store_file, os.F_OK): print log_message('file exists...')
+    if args.overwrite: print log_message('will overwrite!')
     # save the image to a temporary file
-    print 'fetching ' + image_url
+    print log_message('fetching ' + image_url)
     image_size = os.write(temp[0], url_open(image_url))
 
     # need to seek to beginning of file to read out the image to the 
@@ -168,14 +183,14 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 
     # diagnostic information
-    print 'will store as ' + store_file
+    print log_message('will store as ' + store_file)
     
     # save the file
     with open(store_file, 'wb+') as image_f:
         image_f.write(os.read(temp[0], image_size))
     
-    print 'file saved to ' + store_file
-    print 'download complete!'
+    print log_message('file saved to ' + store_file)
+    print log_message('download complete!')
 
     # clean up the temp file
     u_path  = temp[1]
@@ -184,11 +199,11 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 # possibly set the background 
 if args.set:
-    print 'setting desktop background...'
+    print log_message('setting desktop background...')
     if not set_bg(store_file):
-        sys.stderr.write('failed to set desktop background!\n')
+        sys.stderr.write(log_message('failed to set desktop background!\n'))
     else:
-        print 'success!'
+        print log_message('success!')
 
 # wew survived the gauntlet!
-print 'finished!'
+print log_message('finished!')
