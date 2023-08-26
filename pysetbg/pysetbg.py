@@ -39,7 +39,7 @@ def set_bg(image_path):
             # platform magic
             platform_import = 'from platforms import %s as set_bg'
             platform_import = platform_import % platform
-            exec platform_import
+            exec(platform_import)
 
         # platform not supported, even though it should be
         except ImportError:

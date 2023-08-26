@@ -56,7 +56,7 @@ def main(image_path):
             return False
 
         else:
-            print 'done!'
+            print('done!')
             return True
 
     # if the user is running fluxbox, look for Esetroot (the first

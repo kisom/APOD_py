@@ -17,30 +17,32 @@ import os
 import re
 import sys
 import tempfile
-import urllib2
+import requests
 from pysetbg.pysetbg import set_bg
 
 ########################
 # function definitions #
 ########################
 
-def url_open(url_str):
+def url_open(url_str, decode_as=None):
     """
     Wrapper for urllib2.urlopen that does error handling and
     offers useful debug messages if something explodes.
     """
 
     try:
-        url	= urllib2.urlopen(url_str)
+        url	= requests.get(url_str)
 
     # something went wrong with the webserver
-    except urllib2.HTTPError, e:
+    except Exception as e:
         err = sys.stderr.write
         err(log_message('APOD download failed with HTTP error '), e.code, '\n')
         sys.exit(2)
 
     else:
-        page 	= url.read()
+        page 	= url.content
+        if decode_as != None:
+            page = page.decode(decode_as)
 
     return page
 
@@ -132,8 +134,8 @@ if args.path:
 # ensure we have access to the directory we are trying to store images in
 # if not, mkdir()
 if not os.access(store_dir, os.W_OK):
-    print log_message('no write permissions on ' + store_dir + '!')
-    print log_message('creating ' + store_dir)
+    print(log_message('no write permissions on ' + store_dir + '!'))
+    print(log_message('creating ' + store_dir))
     try:
         os.makedirs(store_dir)
     except OSError:
@@ -141,7 +143,7 @@ if not os.access(store_dir, os.W_OK):
         sys.exit(2)
 
 # fetch page
-page    = url_open(base_url + 'astropix.html').split('\n')
+page    = url_open(base_url + 'astropix.html', decode_as='utf-8').split('\n')
 
 # hunt down the APOD
 for line in page:
@@ -165,16 +167,16 @@ store_file  = store_dir + image_name
 # we won't download the image. If the force option is specified, the 
 # program will try to set the background.
 if os.access(store_file, os.F_OK) and not args.overwrite:
-    print log_message('file already exists!')
+    print(log_message('file already exists!'))
 
     if not args.force:
         sys.exit(4)
 
 elif not os.access(store_file, os.F_OK) or args.overwrite:
-    if os.access(store_file, os.F_OK): print log_message('file exists...')
-    if args.overwrite: print log_message('will overwrite!')
+    if os.access(store_file, os.F_OK): print(log_message('file exists...'))
+    if args.overwrite: print(log_message('will overwrite!'))
     # save the image to a temporary file
-    print log_message('fetching ' + image_url)
+    print(log_message('fetching ' + image_url))
     image_size = os.write(temp[0], url_open(image_url))
 
     # need to seek to beginning of file to read out the image to the 
@@ -183,14 +185,14 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 
     # diagnostic information
-    print log_message('will store as ' + store_file)
+    print(log_message('will store as ' + store_file))
     
     # save the file
     with open(store_file, 'wb+') as image_f:
         image_f.write(os.read(temp[0], image_size))
     
-    print log_message('file saved to ' + store_file)
-    print log_message('download complete!')
+    print(log_message('file saved to ' + store_file))
+    print(log_message('download complete!'))
 
     # clean up the temp file
     u_path  = temp[1]
@@ -199,11 +201,11 @@ elif not os.access(store_file, os.F_OK) or args.overwrite:
 
 # possibly set the background 
 if args.set:
-    print log_message('setting desktop background...')
+    print(log_message('setting desktop background...'))
     if not set_bg(store_file):
         sys.stderr.write(log_message('failed to set desktop background!\n'))
     else:
-        print log_message('success!')
+        print(log_message('success!'))
 
 # wew survived the gauntlet!
-print log_message('finished!')
+print(log_message('finished!'))
